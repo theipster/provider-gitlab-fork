@@ -10,6 +10,9 @@ jobs:
     name: 🚢 Distribute images
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: CI registry login
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | \
