@@ -33,10 +33,10 @@ jobs:
           up --version
 
           # Build image
-          up xpkg build -f ./package -o out.xpkg
+          make build
 
           # Push image
           imagePath=${{ format('{0}/{1}:{2}', env.CI_REGISTRY, github.repository, github.sha) }}
           imageLatestPath=${{ format('{0}/{1}:latest', env.CI_REGISTRY, github.repository) }}
-          up xpkg push $imagePath -f out.xpkg
-          up xpkg push $imageLatestPath -f out.xpkg
+          up xpkg push $imagePath -f _output/xpkg/*/provider-gitlab-*.xpkg
+          up xpkg push $imageLatestPath -f _output/xpkg/*/provider-gitlab-*.xpkg
