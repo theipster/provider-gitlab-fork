@@ -24,8 +24,8 @@ jobs:
           git submodule update --init
 
           # https://github.com/crossplane/crossplane/issues/3051#issuecomment-1110818830
-          cat package/crds/*.yaml >> crossplane.yaml
-          cat crossplane.yaml
+          echo "" >> package/crossplane.yaml
+          cat package/crds/*.yaml >> package/crossplane.yaml
 
           # Build image
           make build
