@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: CI registry login
         run: |
-          echo ${{ secrets.GHCR_TOKEN }} | \
+          echo ${{ secrets.GITHUB_TOKEN }} | \
             docker login ${{ env.CI_REGISTRY }} -u ${{ github.repository_owner }} --password-stdin
 
       - name: CI image build/publish
