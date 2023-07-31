@@ -1,0 +1,36 @@
+name: releases
+
+env:
+  CI_REGISTRY: ghcr.io
+
+on: push
+
+jobs:
+  distribute-images:
+    name: 🚢 Distribute images
+    runs-on: ubuntu-latest
+    steps:
+      - name: CI registry login
+        run: |
+          echo ${{ secrets.GHCR_TOKEN }} | \
+            docker login ${{ env.CI_REGISTRY }} -u ${{ github.repository_owner }} --password-stdin
+
+      - name: CI image build/publish
+        run: |
+          git submodule update
+
+          # Build image
+          make build
+          docker image ls
+          imageId=$(docker image ls build-*/provider-gitlab-* -q)
+          echo "$imageId"
+
+          # Tag image
+          imagePath=${{ format('{0}/{1}:{2}', env.CI_REGISTRY, github.repository, github.sha) }}
+          imageLatestPath=${{ format('{0}/{1}:latest', env.CI_REGISTRY, github.repository) }}
+          docker tag $imageId $imagePath
+          docker tag $imageId $imageLatestPath
+
+          # Push image
+          docker push $imagePath
+          docker push $imageLatestPath
